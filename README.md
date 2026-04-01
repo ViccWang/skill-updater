@@ -7,7 +7,7 @@ Cross-platform skill updater for AI coding tools and local skill ecosystems.
 - `git` 工作树型安装
 - `.skill-lock.json` 锁文件驱动的展开式安装
 
-它的设计目标是让同一套检查和更新流程尽可能复用于 Claude Code、Cursor、VS Code Copilot、Gemini CLI、Codex CLI、OpenCode 等环境。
+它的设计目标是让同一套检查和更新流程尽可能复用于 Claude Code、Cursor、VS Code Copilot、Gemini CLI、Codex CLI、OpenCode、OpenClaw 等环境。
 
 ## Features
 
@@ -29,11 +29,14 @@ Cross-platform skill updater for AI coding tools and local skill ecosystems.
 - Gemini CLI
 - Codex CLI
 - OpenCode
+- OpenClaw
 
 默认扫描范围包括：
 
 - 当前项目下的 `.claude`、`.cursor`、`.agents`、`.codex`、`.github`、`.gemini`、`.opencode`
 - 用户主目录下的对应全局目录
+- `~/.openclaw/skills`
+- `~/.openclaw/workspace/skills`
 
 ## Installation
 
@@ -61,6 +64,7 @@ sh skills/skill-updater/scripts/skill-updater update
 sh skills/skill-updater/scripts/skill-updater check --json
 sh skills/skill-updater/scripts/skill-updater check --source pbakaus/impeccable
 sh skills/skill-updater/scripts/skill-updater update --path ~/.agents
+sh skills/skill-updater/scripts/skill-updater check --path ~/.openclaw/workspace
 ```
 
 ### Natural Language Prompts
@@ -73,6 +77,7 @@ sh skills/skill-updater/scripts/skill-updater update --path ~/.agents
 - 同步 skills
 - 看看哪些 skill 要更新
 - 更新 GitHub 装的 skills
+- 检查 OpenClaw skills
 - 检查全局 skills
 - 只看有风险的 skill
 - 输出 skill 状态 JSON
@@ -83,6 +88,7 @@ sh skills/skill-updater/scripts/skill-updater update --path ~/.agents
 - 检查当前项目和全局目录里的 skills
 - 更新所有安全可更新的 skills
 - 只检查 `~/.agents` 下面的 skills
+- 只检查 `~/.openclaw/workspace` 里的 skills
 - 只看 `pbakaus/impeccable` 这批 skill 的状态
 
 ## How It Works

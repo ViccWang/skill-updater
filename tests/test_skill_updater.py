@@ -256,12 +256,23 @@ class ScanTests(unittest.TestCase):
             home = root / "home"
             (workspace / ".claude" / "skills").mkdir(parents=True)
             (home / ".agents" / "skills").mkdir(parents=True)
+            (home / ".openclaw" / "skills").mkdir(parents=True)
+            (home / ".openclaw" / "workspace" / "skills").mkdir(parents=True)
 
             roots = MODULE.default_provider_roots(workspace_root=workspace, home_root=home)
 
             self.assertIn((workspace / ".claude").resolve(), roots)
             self.assertIn((home / ".agents").resolve(), roots)
+            self.assertIn((home / ".openclaw").resolve(), roots)
+            self.assertIn((home / ".openclaw" / "workspace").resolve(), roots)
             self.assertEqual(len(roots), len(set(roots)))
+
+    def test_infer_provider_root_handles_openclaw_workspace(self):
+        skill_path = pathlib.Path("/tmp/demo/.openclaw/workspace/skills/demo-skill/SKILL.md")
+
+        provider_root = MODULE.infer_provider_root(skill_path)
+
+        self.assertEqual(provider_root, pathlib.Path("/tmp/demo/.openclaw/workspace"))
 
     def test_collect_reports_honors_source_filter(self):
         with tempfile.TemporaryDirectory() as temp:

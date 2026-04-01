@@ -17,7 +17,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 
-PROVIDER_DIRS = (".claude", ".cursor", ".agents", ".codex", ".github", ".gemini", ".opencode")
+PROVIDER_DIRS = (".claude", ".cursor", ".agents", ".codex", ".github", ".gemini", ".opencode", ".openclaw")
 
 
 @dataclasses.dataclass
@@ -54,14 +54,19 @@ def git_output(repo: Path, args: list[str], check: bool = True) -> str:
     return result.stdout.strip()
 
 
+def provider_root_candidates(base: Path) -> list[Path]:
+    candidates = [(base / name).resolve() for name in PROVIDER_DIRS]
+    candidates.append((base / ".openclaw" / "workspace").resolve())
+    return candidates
+
+
 def default_provider_roots(workspace_root: Path | str | None = None, home_root: Path | str | None = None) -> list[Path]:
     workspace = Path(workspace_root or Path.cwd()).resolve()
     home = Path(home_root or Path.home()).resolve()
     seen: set[Path] = set()
     results: list[Path] = []
     for base in (workspace, home):
-        for name in PROVIDER_DIRS:
-            candidate = (base / name).resolve()
+        for candidate in provider_root_candidates(base):
             if candidate in seen:
                 continue
             if (candidate / "skills").exists() or (candidate / ".skill-lock.json").exists():
@@ -72,8 +77,13 @@ def default_provider_roots(workspace_root: Path | str | None = None, home_root: 
 
 def infer_provider_root(skill_path: Path) -> Path:
     for parent in skill_path.parents:
-        if parent.name == "skills" and parent.parent.name in PROVIDER_DIRS:
-            return parent.parent
+        if parent.name != "skills":
+            continue
+        provider_root = parent.parent
+        if provider_root.name in PROVIDER_DIRS:
+            return provider_root
+        if provider_root.name == "workspace" and provider_root.parent.name == ".openclaw":
+            return provider_root
     return skill_path.parent
 
 
