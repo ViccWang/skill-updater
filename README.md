@@ -21,6 +21,20 @@
 - 当前项目下的 `.claude`、`.cursor`、`.agents`、`.codex`、`.github`、`.gemini`、`.opencode`
 - 用户主目录下的对应全局目录
 
+## 安装
+
+ClawHub 一键安装：
+
+```bash
+clawhub install cross-platform-skill-updater
+```
+
+GitHub 仓库：
+
+```bash
+git clone https://github.com/ViccWang/skill-updater.git
+```
+
 ## 命令
 
 ```bash
